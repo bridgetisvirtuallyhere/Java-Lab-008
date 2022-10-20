@@ -1,3 +1,7 @@
+/*
+@author Bridget Acosta
+@date 10/19/2022
+ */
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import org.zeromq.SocketType;
@@ -28,16 +32,31 @@ public class LEDClient {
         System.out.println(message);
         zsocket.send(message);
     }
-
-    public void blinkN(int[] color, int times, int miliseconds) throws  InterruptedException{
+    /*
+    Alters the colors
+    Rotates through multiple colors, etc.
+     */
+    public void thatsTheSoundOfThePolice(int[] blue, int[]red, int times, int miliseconds) throws  InterruptedException{
         for(int i=0; i<times; i++) {
-            send(color);
+            send(blue);
             TimeUnit.MILLISECONDS.sleep(miliseconds);
-            send(LEDClient.OFF);
+            send(red);
             TimeUnit.MILLISECONDS.sleep(miliseconds);
         }
     }
 
+
+    /*public void red(int[] red, int times, int miliseconds) throws  InterruptedException{
+        for(int i=0; i<times; i++) {
+            send(red);
+            TimeUnit.MILLISECONDS.sleep(miliseconds);
+            send(LEDClient.OFF);
+            TimeUnit.MILLISECONDS.sleep(miliseconds);
+        }
+    }*/
+public static void police(){
+
+}
     public void close() throws InterruptedException {
         TimeUnit.SECONDS.sleep(2); // Allow the socket a chance to flush.
         this.zsocket.close();
@@ -47,8 +66,12 @@ public class LEDClient {
     public static void main(String[] args) {
         LEDClient ledClient = new LEDClient("tcp", "192.168.86.250", 5001);
         try {
-            int[] color = {0, 0, 255};
-            ledClient.blinkN(color, 5, 1000);
+            int[] blue = {0, 0, 255};
+            int[] red = {255, 0, 0};
+            //Alters the timing
+            ledClient.thatsTheSoundOfThePolice(blue, red, 5, 1000);
+            ledClient.thatsTheSoundOfThePolice(blue, red, 5, 500);
+            ledClient.thatsTheSoundOfThePolice(blue, red, 3, 250);
             ledClient.close();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
